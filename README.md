@@ -1,120 +1,128 @@
 # post-to-visual
 
-Turn an article, post, or dense note into a **圖文好讀版** — a single-file, illustrated,
-easy-to-read HTML page with editorial illustrations and themeable SVG data-viz. Built as a
-[Claude Code](https://claude.com/claude-code) skill, but the scripts and asset library work
-standalone.
+Turn an article, post, or dense note into an **illustrated, easy-to-read web page** — one
+self-contained HTML file you can share or re-read. (圖文好讀版 means "illustrated easy-read
+version" in Chinese.)
 
-It is **not** an HTML template. It's a pipeline (read → structure → visualize → assemble →
-verify) plus a toolkit the model composes per post. The value is in the visual decisions,
-not in a fixed layout.
+**You give it** a link or some text.
+**You get** one `.html` file: a clear headline, the content split into sections, the key ideas
+turned into clean diagrams (and optional illustrations), a glossary for the jargon, and light +
+dark themes — no build step, nothing to install to view it.
 
-> Works with **zero API keys**. Image generation (Gemini) is optional — see [SVG-only mode](#svg-only-mode).
+→ **See one:** open [`examples/art-of-war-laying-plans/laying-plans.html`](examples/art-of-war-laying-plans/laying-plans.html)
+in a browser. It was built with **no API key** — every visual is hand-drawn SVG.
 
----
-
-## What you get
-
-| File | What it does |
-|------|--------------|
-| `SKILL.md` | The pipeline, step by step (the skill's brain) |
-| `scripts/cli.py` (`p2v`) | Standalone CLI: scaffold a page, generate a palette/images, verify, preview — no Claude Code needed |
-| `scripts/gen_illustrations.py` | Editorial illustrations from a JSON spec (Gemini "nano banana") — optional |
-| `scripts/gen_palette.py` | Build a contrast-safe light+dark palette from one accent hex |
-| `scripts/verify.py` | Dependency-free pre-ship checker (tags, anchors, OG, contrast, image bytes…) |
-| `assets/svg-recipes/recipes.html` | 8 themeable, light/dark-safe SVG diagram recipes + a "which chart when" guide |
-| `assets/themes.css` + `themes.html` | 3 vetted light+dark palettes (editorial / pine / slate) with a live preview |
-| `assets/components/components.html` | 6 optional vanilla-JS widgets (quiz, before/after, copy-as-prompt, tabs, glossary, jargon toggle) |
-| `knowledge/` | Bundled writing + structure references (anti-AI prose, single-file HTML rules, image recipe) |
-| `examples/` | A runnable, no-key sample you can reproduce |
-
-Open `recipes.html`, `themes.html`, and `components.html` in a browser — each is a live gallery
-with copy buttons and a light/dark toggle.
+> Works with **zero API keys.** AI illustrations are optional; a page stands on diagrams and
+> typography alone.
 
 ---
 
-## Quickstart
+## The idea in 30 seconds
 
-### With Claude Code (intended use)
-Drop this folder in your skills directory and ask: *"make this readable"*, *"turn this post
-into a 圖文版"*, or *"visualize this article"* with a URL or pasted text. The skill runs the
-pipeline in `SKILL.md`.
+It is **not a template.** It's a short pipeline plus a toolkit:
 
-### Standalone — the `p2v` CLI (no Claude Code, no deps)
-For people not using Claude Code: scaffold and check pages yourself, bring your own LLM (or
-hand) for the prose.
+> **read → break into sections → pick the right visual for each → assemble one HTML file → check it**
+
+You (or an AI assistant) make the judgment calls. The toolkit hands you tested parts — diagram
+recipes, color palettes, a checker — so you're not reinventing the basics or shipping a broken
+page. Built as a [Claude Code](https://claude.com/claude-code) skill, but the scripts and
+galleries work on their own.
+
+---
+
+## Three ways to use it
+
+**1 · With an AI assistant (the intended way).** Drop this folder into your Claude Code skills
+directory and say *"make this readable"* / *"visualize this article"* with a URL or pasted text.
+The assistant follows the pipeline in [`SKILL.md`](SKILL.md). (Agents: see [`AGENTS.md`](AGENTS.md).)
+
+**2 · With the `p2v` CLI** — no AI, nothing to install. Scaffold and check pages yourself; write
+the prose by hand or with any tool.
 ```bash
 alias p2v='python3 /path/to/post-to-visual/scripts/cli.py'
-p2v new my-post --palette pine --title "My Post"   # starter page + spec + assets dir
-p2v palette "#7C3AED" --secondary "#0D9488"         # contrast-safe light+dark tokens
-p2v gallery recipes                                  # open a gallery in the browser
-p2v verify my-post.html                              # pre-ship checks
-p2v serve .                                          # preview over localhost
+p2v new my-post --palette pine --title "My Post"   # starter page + spec + assets folder
+p2v palette "#7C3AED"                               # a color palette from one hex
+p2v gallery recipes                                  # browse the diagram recipes
+p2v verify my-post.html                              # catch problems before you ship
+p2v serve .                                          # preview at http://localhost
 ```
-The scaffold from `p2v new` is a minimal valid shell (favicon + absolute OG + your chosen
-palette, passes `verify`) — fill in the sections; it is deliberately not a rich template.
 
-### Verify any HTML page (zero install)
+**3 · Just the checker** — point it at any HTML page (zero install, no deps):
 ```bash
-python3 scripts/verify.py path/to/page.html
+python3 scripts/verify.py path/to/page.html        # add --json for machine output
 ```
-Reports `FAIL` / `WARN` for the bugs that actually ship: unbalanced tags, dead `#anchors`,
-relative `og:image`/`og:url` (blank social previews), missing favicon, missing images,
-JPEG-bytes-in-a-.png (breaks LINE), duplicate SVG marker ids, the `.nav a` selector trap, and
-white-text-on-a-non-`--*-solid` fill (unreadable in dark mode). Exit 1 on any FAIL.
-
-### Generate illustrations (optional, needs a Gemini key)
-```bash
-pip install google-genai python-dotenv
-export GEMINI_API_KEY=...                 # or put it in a .env (see Config)
-python3 scripts/gen_illustrations.py path/to/spec.json
-```
+It flags the bugs that actually ship: broken in-page links, social-preview tags that aren't
+absolute URLs (→ blank preview when shared), a missing favicon, images that don't load, JPEG
+data saved as a `.png` (breaks link previews on LINE), and white text on a color that turns
+unreadable in dark mode. Exit code 1 if anything fails.
 
 ---
 
-## SVG-only mode
+## SVG-only mode (no image budget? no problem)
 
-You do **not** need an image API. A post-to-visual page is fully valid — often better — with
-zero AI images: carry it on the SVG recipes + strong typography + pull-quotes. Pure-prose
-essays in particular look more intentional without stock-feel illustrations. Just skip the
-image step and lean on `assets/svg-recipes/`. The `examples/` page is built this way, so you
-can reproduce it with no key.
+You don't need an image API. A page is fully valid — often **better** — with no AI pictures at
+all: carry it on the SVG diagram recipes plus strong typography. Pure-prose essays in particular
+look more intentional without stock-feel art. The example above is built this way, so you can
+reproduce it with no key.
+
+---
+
+## What's in the box
+
+| Path | What it is |
+|------|-----------|
+| [`SKILL.md`](SKILL.md) | The step-by-step pipeline (the "how to build a page" guide) |
+| [`AGENTS.md`](AGENTS.md) · [`llms.txt`](llms.txt) | Machine-readable guides for AI agents and LLMs |
+| `scripts/cli.py` (`p2v`) | One command for everything: scaffold, palette, images, verify, preview |
+| `scripts/verify.py` | The pre-ship checker. No dependencies. `--json` for agents |
+| `scripts/gen_palette.py` | A full light + dark color palette from a single accent color |
+| `scripts/gen_illustrations.py` | Optional AI illustrations (Google Gemini) from a small JSON file |
+| `assets/svg-recipes/recipes.html` | 8 ready-to-copy diagram patterns + a "which chart when" guide |
+| `assets/themes.css` · `themes.html` | 3 color palettes with a live preview you can toggle |
+| `assets/components/components.html` | 6 optional interactive widgets (quiz, before/after slider, tabs…) |
+| `knowledge/` | Reference notes on clear writing and clean single-file HTML |
+| `examples/` | A complete sample you can open and reproduce |
+
+The three `.html` files in `assets/` are **live galleries** — open them in a browser, toggle
+light/dark, and copy any piece with a button.
+
+---
+
+## Using this with AI agents
+
+post-to-visual is built for an era where an AI does much of the work, so its instructions are
+written for machines to read and act on, not just humans:
+
+- **[`SKILL.md`](SKILL.md)** — the full pipeline an assistant follows to build a page.
+- **[`AGENTS.md`](AGENTS.md)** — the rules and common tasks for any AI coding agent editing this
+  repo (the [agents.md](https://agents.md) convention, read by Claude Code, Cursor, and others).
+- **[`llms.txt`](llms.txt)** — a one-screen map of the repo in the [llms.txt](https://llmstxt.org)
+  format, so an LLM can find the right file fast.
+- **`verify.py --json`** — gives an agent a hard pass/fail it can parse, so it self-checks its
+  output instead of guessing whether the page is correct.
+
+Point your agent at `AGENTS.md` and it can build or extend a page without breaking the rules.
 
 ---
 
 ## Config
 
-- **API key** (only for image gen): `GEMINI_API_KEY` in the environment, or `--env path/to/.env`,
-  or a `.env` auto-discovered in the spec's folder / up to the repo root / `~/.config/post-to-visual/.env`.
-- **Palette**: pick `editorial` / `pine` / `slate` from `assets/themes.css` — copy its LIGHT
-  token block into the page's `:root{}` and the DARK block into the `prefers-color-scheme: dark`
-  block. Token names are accent *slots*, so the recipes keep working; only the hues change. Or
-  generate your own from one hex: `p2v palette "#7C3AED"` (solids auto-checked for white-text
-  contrast in both themes).
-- **Open Graph base URL**: OG tags must be absolute, so pages need your public base URL. The
-  page goes at `<base>/<slug>`, assets at `<base>/<slug>-assets/images/<name>`. Set your own base.
-- **Image provider**: `"provider"` in the spec or `--provider`. Only `gemini` ships today;
-  there's a documented seam in `gen_illustrations.py` to add OpenAI / Flux / local.
+- **API key** (only for AI images): set `GEMINI_API_KEY`, or pass `--env path/to/.env`, or drop a
+  `.env` in the spec's folder / up to the repo root / `~/.config/post-to-visual/.env`.
+- **Palette**: pick `editorial` / `pine` / `slate` from `assets/themes.css`, or generate your own
+  with `p2v palette "#yourhex"`. Color names in the CSS are *roles* (primary, secondary…), so
+  diagrams keep working when you swap palettes — only the hues change.
+- **Social-preview URLs**: link-preview tags must be absolute, so a page needs your public base
+  URL — the page sits at `<base>/<slug>`, its images at `<base>/<slug>-assets/images/`.
 
 ---
 
-## How the output is structured
+## Notes & license
 
-Per `knowledge/v2-standalone-structure.md`: one self-contained HTML file, light + dark via
-`prefers-color-scheme`, sticky nav whose links match section ids, a 2-column card grid, tables
-wrapped to scroll on mobile, and a mandatory favicon + Open Graph in the `<head>`. Prose follows
-`knowledge/anti-ai-writing.md` (be specific, kill significance-puffery and rule-of-three filler).
-
----
-
-## Notes & attribution
-
-- **Image generation calls a paid API** (Google Gemini, model `gemini-3.1-flash-image-preview`,
-  a.k.a. "nano banana"). You bring your own key; you pay for what you generate. SVG-only is free.
-- Nano banana garbles any text it tries to render — every image prompt says "no text"; all
-  labels live in HTML/SVG. It returns **JPEG bytes**, so generated files are `.jpg`.
-- Web fonts in the sample pages load from Google Fonts; swap or self-host as you like.
-- **License: [MIT](./LICENSE).** The bundled `knowledge/` files are the author's working
-  notes — fine to read and adapt; review before redistributing verbatim.
-- The skill assumes [Claude Code](https://claude.com/claude-code) for the full pipeline; the
-  `scripts/` and `assets/` are useful on their own.
+- **AI image generation calls a paid API** (Google Gemini's image model, nicknamed "nano
+  banana"). You bring your own key and pay for what you generate. The SVG-only path is free.
+- That image model garbles any text it draws, so prompts say "no text" and all labels live in
+  the HTML/SVG. It returns JPEG data, so generated files end in `.jpg`.
+- Sample pages load web fonts from Google Fonts — swap or self-host as you like.
+- **License: [MIT](LICENSE).** The `knowledge/` notes are the author's own; adapt freely, but
+  review before redistributing verbatim.

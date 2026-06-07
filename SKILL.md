@@ -190,7 +190,7 @@ It checks tag balance, nav `href="#id"`→`id` resolution (ignoring code samples
 `og:image`/`og:url`, favicon present, every `<img>` exists + extension matches real bytes
 (the JPEG-named-.png / LINE trap), duplicate SVG marker ids, the `.nav a` selector bug, and
 the white-text-on-non-`*-solid` dark-mode contrast trap. Exit 1 on any FAIL; WARNs never
-block. Pure stdlib — runs anywhere. (`--serve` also runs a headless console-error check if a
+block. Pure stdlib — runs anywhere. (`--json` emits a parseable result; `--serve` also runs a headless console-error check if a
 gstack browse binary is present.) **Fix every FAIL before continuing.**
 
 Then the eyeball pass: serve over HTTP (`python3 -m http.server`, then `localhost/...`) —

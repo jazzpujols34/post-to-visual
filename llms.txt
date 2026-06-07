@@ -1,0 +1,30 @@
+# post-to-visual
+
+> Turn an article, post, or dense note into a single self-contained, illustrated, easy-to-read
+> HTML page (圖文好讀版). A pipeline plus a toolkit for AI assistants and humans — not a template.
+> Works with zero API keys (an SVG-only mode is first-class); AI illustrations are optional.
+
+The build procedure is in SKILL.md. Agents editing the repo should read AGENTS.md for the rules
+(verify before done; `nav a` not `.nav a`; white-text boxes use `--*-solid`; favicon + absolute
+Open Graph; don't templatize; gloss jargon).
+
+## Start here
+- [README](README.md): what it is, the three ways to use it, quickstart
+- [SKILL.md](SKILL.md): the full step-by-step pipeline to build a page
+- [AGENTS.md](AGENTS.md): rules and common tasks for AI agents editing this repo
+
+## Toolkit (scripts)
+- [verify.py](scripts/verify.py): dependency-free pre-ship checker; run before "done"; `--json` for machine output
+- [gen_palette.py](scripts/gen_palette.py): contrast-safe light+dark palette from one accent hex
+- [gen_illustrations.py](scripts/gen_illustrations.py): optional Google Gemini editorial illustrations from a JSON spec
+- [cli.py](scripts/cli.py): the `p2v` command (new / palette / images / verify / gallery / serve)
+
+## Reference (assets + knowledge)
+- [SVG diagram recipes](assets/svg-recipes/recipes.html): 8 themeable, light/dark-safe patterns + a "which chart when" guide
+- [Theme palettes](assets/themes.css): editorial / pine / slate, each contrast-checked
+- [Interactive components](assets/components/components.html): 6 optional vanilla-JS widgets
+- [Writing rules](knowledge/anti-ai-writing.md): how to keep prose specific and non-AI-sounding
+- [HTML structure rules](knowledge/v2-standalone-structure.md): single-file, light+dark, layout conventions
+
+## Example
+- [Art of War — Laying Plans](examples/art-of-war-laying-plans/laying-plans.html): a complete, no-API-key, SVG-only build

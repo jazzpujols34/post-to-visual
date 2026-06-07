@@ -10,6 +10,7 @@ browse binary is found; otherwise they're skipped, never required.
 Usage:
   python3 verify.py path/to/page.html [more.html ...]
   python3 verify.py --serve path/to/page.html   # also run headless console check if gstack is present
+  python3 verify.py --json  path/to/page.html   # machine-readable result for AI agents / CI
 
 Exit code: 0 if no FAILs, 1 if any FAIL. WARNs never fail the build.
 
@@ -243,16 +244,28 @@ def verify(path_str, do_render):
 def main():
     args = sys.argv[1:]
     do_render = "--serve" in args
+    as_json = "--json" in args  # machine-readable output for AI agents / CI
     files = [a for a in args if not a.startswith("--")]
     if not files:
-        print("usage: python3 verify.py [--serve] page.html [more.html ...]")
+        print("usage: python3 verify.py [--serve] [--json] page.html [more.html ...]")
         sys.exit(2)
-    total_fail = total_warn = 0
-    for f in files:
-        rep = verify(f, do_render)
-        rep.print()
-        total_fail += rep.fails
-        total_warn += rep.warns
+    reps = [verify(f, do_render) for f in files]
+    total_fail = sum(r.fails for r in reps)
+    total_warn = sum(r.warns for r in reps)
+
+    if as_json:
+        import json
+        out = {
+            "ok": total_fail == 0,
+            "fail": total_fail, "warn": total_warn,
+            "files": [{"file": r.name, "fail": r.fails, "warn": r.warns,
+                       "items": [{"level": lv, "msg": m} for lv, m in r.items]} for r in reps],
+        }
+        print(json.dumps(out, indent=2))
+        sys.exit(1 if total_fail else 0)
+
+    for r in reps:
+        r.print()
     print()
     verdict = f"{C['FAIL']}FAIL{C['z']}" if total_fail else (f"{C['WARN']}PASS (with warnings){C['z']}" if total_warn else f"{C['PASS']}PASS{C['z']}")
     print(f"{verdict}  {total_fail} fail · {total_warn} warn across {len(files)} file(s)")
