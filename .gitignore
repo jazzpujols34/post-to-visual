@@ -1,0 +1,20 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# python
+__pycache__/
+*.py[cod]
+
+# secrets — never commit keys
+.env
+*.env
+!.env.example
+
+# headless-browser scratch (gstack)
+.gstack/
+
+# generated illustration output (images land next to their spec; bring your own)
+# uncomment if you keep specs in-repo and don't want their renders committed:
+# *-assets/images/

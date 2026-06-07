@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Art of War — Laying Plans｜a 圖文好讀版 example</title>
+<meta name="description" content="Sun Tzu's Chapter 1, Laying Plans, as an illustrated easy-read page: the five constant factors, the seven considerations, and 'all warfare is based on deception'. Built SVG-only — no AI images, no API key.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%234F46E5'/%3E%3Cpath%20d='M12%204%205%207v5c0%204%203%206.5%207%208%204-1.5%207-4%207-8V7z'%20fill='none'%20stroke='%23fff'%20stroke-width='1.6'%20stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Art of War — Laying Plans (圖文好讀版 example)">
+<meta property="og:description" content="Sun Tzu's Chapter 1 as an illustrated easy-read page. Built SVG-only — no AI images, no API key. A post-to-visual example.">
+<meta property="og:url" content="https://example.com/art-of-war-laying-plans">
+<meta property="og:image" content="https://example.com/og-default.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://example.com/og-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Noto+Serif+SC:wght@700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-primary:#FAFAF8; --bg-secondary:#F2F1EC; --bg-card:#FFFFFF; --bg-code:#F4F3EF; --bg-nav:rgba(250,250,248,.85);
+  --text-primary:#1A1A18; --text-secondary:#52514C; --text-tertiary:#8A887F;
+  --border-default:#E3E1DA; --border-light:#EDEBE4;
+  --indigo:#4F46E5; --indigo-bg:#ECEBFB; --teal:#0D9488; --teal-bg:#E0F2F0;
+  --amber:#B45309; --amber-bg:#FBF1E3; --coral:#DC2626; --coral-bg:#FCE9E9; --green:#15803D; --green-bg:#E6F3EA;
+  --coral-solid:#DC2626; --teal-solid:#0D9488; --green-solid:#15803D; --indigo-solid:#4F46E5;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark){ :root{
+  --bg-primary:#15140F; --bg-secondary:#1D1C16; --bg-card:#23211A; --bg-code:#1A1914; --bg-nav:rgba(21,20,15,.85);
+  --text-primary:#F1EFE6; --text-secondary:#BFBCB0; --text-tertiary:#85827A; --border-default:#34322A; --border-light:#2A281F;
+  --indigo:#A5A0FB; --indigo-bg:#272447; --teal:#5ED8C9; --teal-bg:#10322E;
+  --amber:#E8A34A; --amber-bg:#3A2C12; --coral:#F08A8A; --coral-bg:#3A1818; --green:#6FD08C; --green-bg:#16331F;
+  --coral-solid:#C23B3B; --teal-solid:#0E7D72; --green-solid:#1C7A40; --indigo-solid:#4940C7;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.4);
+}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif; background:var(--bg-primary); color:var(--text-primary); line-height:1.8; font-size:16px; -webkit-font-smoothing:antialiased}
+.mono{font-family:'JetBrains Mono',monospace}
+.han{font-family:'Noto Serif SC',serif}
+
+nav{position:sticky; top:0; z-index:50; background:var(--bg-nav); backdrop-filter:blur(12px); border-bottom:1px solid var(--border-default)}
+.nav-inner{max-width:1080px; margin:0 auto; padding:12px 32px; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.nav-brand{font-weight:900; font-size:15px; margin-right:auto; display:flex; align-items:center; gap:9px}
+.nav-brand svg{width:20px;height:20px;color:var(--indigo)}
+nav a{color:var(--text-secondary); text-decoration:none; font-size:13px; font-weight:500; padding:5px 11px; border-radius:7px; white-space:nowrap}
+nav a:hover{background:var(--bg-secondary); color:var(--text-primary)}
+nav a.nav-key{color:var(--indigo); font-weight:700}
+
+.wrap{max-width:1080px; margin:0 auto; padding:32px 32px 96px}
+section{padding-top:46px; scroll-margin-top:72px}
+.sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:8px}
+.sec-num{font-family:'JetBrains Mono',monospace; font-size:clamp(22px,3vw,30px); color:var(--indigo); font-weight:700; flex-shrink:0; letter-spacing:-.02em}
+h2{font-size:clamp(24px,3.4vw,33px); font-weight:900; letter-spacing:-.02em; line-height:1.2}
+.sec-lead{color:var(--text-secondary); font-size:16px; max-width:780px; margin:10px 0 24px}
+
+.hero{padding:54px 0 14px}
+.eyebrow{font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); font-weight:500}
+h1{font-size:clamp(34px,6vw,60px); font-weight:900; letter-spacing:-.03em; line-height:1.06; margin:14px 0 18px}
+h1 .hl{color:var(--indigo)}
+.hero-sub{font-size:clamp(17px,2.2vw,21px); color:var(--text-secondary); max-width:740px; line-height:1.6}
+.byline{margin-top:20px; font-size:14px; color:var(--text-tertiary); display:flex; gap:12px; flex-wrap:wrap}
+.tldr{background:var(--indigo-bg); border-radius:14px; padding:22px 26px; margin-top:28px}
+.tldr h3{color:var(--indigo); display:flex; align-items:center; gap:9px; font-size:18px; margin-bottom:6px}
+.tldr p{font-size:16px; color:var(--text-primary)}
+
+.grid{display:grid; grid-template-columns:repeat(2,1fr); gap:18px}
+.card{background:var(--bg-card); border:1px solid var(--border-default); border-radius:14px; padding:22px; box-shadow:var(--shadow)}
+.card-full{grid-column:1/-1}
+.card-diagram{grid-column:1/-1; overflow-x:auto}
+.card h3{font-size:17px; font-weight:700; margin-bottom:6px}
+.card p{color:var(--text-secondary); font-size:14.5px}
+
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px}
+.tile{background:var(--bg-card); border:1px solid var(--border-default); border-radius:14px; padding:20px; box-shadow:var(--shadow)}
+.tile .han{font-size:40px; font-weight:900; line-height:1; color:var(--indigo)}
+.tile .nm{font-size:15px; font-weight:700; margin-top:10px}
+.tile .gl{font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.6}
+
+ol.seven{list-style:none; counter-reset:s; margin-top:4px}
+ol.seven li{counter-increment:s; position:relative; padding:11px 0 11px 44px; border-bottom:1px solid var(--border-light); color:var(--text-secondary); font-size:15px}
+ol.seven li:last-child{border-bottom:none}
+ol.seven li::before{content:counter(s); position:absolute; left:0; top:10px; width:28px; height:28px; border-radius:8px; background:var(--indigo-bg); color:var(--indigo); font-weight:700; font-size:13px; font-family:'JetBrains Mono',monospace; display:flex; align-items:center; justify-content:center}
+
+.pq{margin:6px 0; padding:8px 0 8px 24px; border-left:4px solid var(--indigo)}
+.pq p{font-size:clamp(20px,2.6vw,27px); font-weight:700; letter-spacing:-.01em; line-height:1.4; color:var(--text-primary)}
+.pq .han{font-size:.7em; color:var(--text-tertiary); font-weight:700; display:block; margin-top:8px}
+
+.dgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:6px}
+.d{background:var(--bg-card); border:1px solid var(--border-default); border-radius:12px; padding:16px 18px}
+.d .seem{font-weight:700; font-size:14.5px; color:var(--text-primary)}
+.d .real{font-size:13px; color:var(--text-tertiary); margin-top:3px}
+
+.gloss{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
+.g{background:var(--bg-card); border:1px solid var(--border-default); border-radius:12px; padding:16px 18px; box-shadow:var(--shadow); display:flex; gap:14px; align-items:flex-start}
+.g .han{font-size:32px; font-weight:900; color:var(--indigo); line-height:1; flex-shrink:0}
+.g .term{font-weight:700; font-size:14.5px}
+.g .def{font-size:13.5px; color:var(--text-secondary); margin-top:4px; line-height:1.6}
+
+.foot{margin-top:60px; padding-top:24px; border-top:1px solid var(--border-default); font-size:13px; color:var(--text-tertiary); text-align:center; line-height:1.8}
+@media (max-width:880px){ .grid,.dgrid,.gloss{grid-template-columns:1fr} .wrap{padding:24px 18px 72px} .nav-inner{padding:10px 16px} nav a:not(.nav-key){display:none} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 7.5 8 9 4.5-1.5 8-4 8-9V6z"/></svg>
+      Laying Plans
+    </span>
+    <a href="#factors" class="nav-key">Five Factors</a>
+    <a href="#deliberate">Deliberation</a>
+    <a href="#seven">Seven Tests</a>
+    <a href="#deception">Deception</a>
+    <a href="#terms">名詞小抄</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div style="display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-bottom:4px;padding:11px 15px;background:var(--indigo-bg);border:1px solid var(--border-default);border-radius:10px;font-size:13px;color:var(--text-secondary);line-height:1.55">
+    <span class="mono" style="font-weight:700;color:var(--indigo);white-space:nowrap">EXAMPLE · SVG-ONLY</span>
+    <span style="flex:1;min-width:240px">A <strong>post-to-visual</strong> sample built with <strong>no AI images and no API key</strong> — every visual is SVG + type. Source: Sun Tzu, <em>The Art of War</em>, Ch.1, tr. Lionel Giles 1910 (public domain).</span>
+  </div>
+
+  <header class="hero">
+    <div class="eyebrow">The Art of War · Chapter I · 始計</div>
+    <h1>Laying <span class="hl">Plans</span></h1>
+    <p class="hero-sub">War, Sun Tzu opens, is a matter of life and death for the State — "a road either to safety or to ruin." So before the first move, you measure. The chapter is a checklist for that measuring: five things to weigh, seven questions to ask, and one blunt rule about how war is actually waged.</p>
+    <div class="byline"><span>Sun Tzu（孫子）</span><span>·</span><span>tr. Lionel Giles, 1910 · public domain</span></div>
+    <div class="tldr">
+      <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>In one line</h3>
+      <p>Battles are won before they're fought — by the side that measured more carefully. Weigh the <strong>five factors</strong>, score the <strong>seven comparisons</strong>, and remember that <strong>all warfare is deception</strong>. Many calculations beforehand beat few.</p>
+    </div>
+  </header>
+
+  <!-- 1. FIVE FACTORS -->
+  <section id="factors">
+    <div class="sec-head"><span class="sec-num">01</span><h2>The five constant factors (五事)</h2></div>
+    <p class="sec-lead">The art of war is governed by five things you take into account before any campaign. Know them and you win; ignore them and you fail.</p>
+    <div class="tiles">
+      <div class="tile"><div class="han">道</div><div class="nm">The Moral Law</div><div class="gl">What puts the people in complete accord with their ruler — they will follow him into any danger. Call it shared purpose.</div></div>
+      <div class="tile"><div class="han">天</div><div class="nm">Heaven</div><div class="gl">Night and day, cold and heat, the seasons. The timing and conditions you don't control but must read.</div></div>
+      <div class="tile"><div class="han">地</div><div class="nm">Earth</div><div class="gl">Distances, danger and safety, open ground and narrow passes — the terrain and the chances of life and death on it.</div></div>
+      <div class="tile"><div class="han">將</div><div class="nm">The Commander</div><div class="gl">The leader's virtues: wisdom, sincerity, benevolence, courage, strictness.</div></div>
+      <div class="tile"><div class="han">法</div><div class="nm">Method &amp; discipline</div><div class="gl">The system: organizing the army, ranks, supply roads, control of spending. The unglamorous logistics that decide outcomes.</div></div>
+    </div>
+  </section>
+
+  <!-- 2. DELIBERATION FLOW -->
+  <section id="deliberate">
+    <div class="sec-head"><span class="sec-num">02</span><h2>How the deliberation runs</h2></div>
+    <p class="sec-lead">The five factors aren't a static list — they feed a process. Assess them, turn them into a side-by-side comparison, and out comes a forecast.</p>
+    <div class="card card-diagram">
+      <svg width="100%" viewBox="0 0 920 130" style="min-width:700px; font-family:'Inter',sans-serif">
+        <defs><marker id="lp1" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="var(--text-tertiary)"/></marker></defs>
+        <rect x="20" y="34" width="250" height="58" rx="12" fill="var(--indigo-bg)"/>
+        <text x="145" y="60" text-anchor="middle" font-size="14" font-weight="700" fill="var(--indigo)">Assess the 五事</text>
+        <text x="145" y="80" text-anchor="middle" font-size="11.5" fill="var(--text-secondary)">five factors, your side + theirs</text>
+        <rect x="335" y="34" width="250" height="58" rx="12" fill="var(--teal-bg)"/>
+        <text x="460" y="60" text-anchor="middle" font-size="14" font-weight="700" fill="var(--teal)">Compare · 七計</text>
+        <text x="460" y="80" text-anchor="middle" font-size="11.5" fill="var(--text-secondary)">seven head-to-head questions</text>
+        <rect x="650" y="34" width="250" height="58" rx="12" fill="var(--green-solid)"/>
+        <text x="775" y="60" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">Forecast 勝負</text>
+        <text x="775" y="80" text-anchor="middle" font-size="11.5" fill="#fff" opacity="0.9">victory or defeat, before the fight</text>
+        <path d="M270,63 L333,63" fill="none" stroke="var(--text-tertiary)" stroke-width="1.6" marker-end="url(#lp1)"/>
+        <path d="M585,63 L648,63" fill="none" stroke="var(--text-tertiary)" stroke-width="1.6" marker-end="url(#lp1)"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 3. SEVEN -->
+  <section id="seven">
+    <div class="sec-head"><span class="sec-num">03</span><h2>The seven considerations (七計)</h2></div>
+    <p class="sec-lead">Lay the two sides side by side and ask seven questions. "By means of these seven I can forecast victory or defeat."</p>
+    <div class="grid">
+      <div class="card card-full">
+        <ol class="seven">
+          <li>Which sovereign is imbued with the Moral Law?</li>
+          <li>Which general has the most ability?</li>
+          <li>With whom lie the advantages of Heaven and Earth?</li>
+          <li>On which side is discipline more rigorously enforced?</li>
+          <li>Which army is the stronger?</li>
+          <li>On which side are officers and men more highly trained?</li>
+          <li>In which army is there greater constancy in reward and punishment?</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. DECEPTION -->
+  <section id="deception">
+    <div class="sec-head"><span class="sec-num">04</span><h2>All warfare is based on deception</h2></div>
+    <p class="sec-lead">Having measured honestly, you then act dishonestly — toward the enemy. The chapter's most quoted line, and a short catalogue of how.</p>
+    <div class="pq">
+      <p>All warfare is based on deception.<span class="han">兵者，詭道也。</span></p>
+    </div>
+    <div class="dgrid">
+      <div class="d"><div class="seem">Seem unable</div><div class="real">…when you are able to attack.</div></div>
+      <div class="d"><div class="seem">Seem inactive</div><div class="real">…when your forces are in use.</div></div>
+      <div class="d"><div class="seem">Seem far away</div><div class="real">…when you are near.</div></div>
+      <div class="d"><div class="seem">Seem near</div><div class="real">…when you are far away.</div></div>
+      <div class="d"><div class="seem">Bait, then crush</div><div class="real">Feign disorder to draw him in.</div></div>
+      <div class="d"><div class="seem">Irritate &amp; flatter</div><div class="real">Anger the hot-tempered; let the proud grow arrogant.</div></div>
+    </div>
+    <div class="card card-full" style="margin-top:18px; background:var(--bg-code)">
+      <p style="font-size:16px; color:var(--text-primary)">The chapter closes where it began — with arithmetic: <span style="font-weight:600">"The general who wins makes many calculations in his temple before the battle; the general who loses makes but few."</span> Whoever does the most counting beforehand can foresee the result.</p>
+    </div>
+  </section>
+
+  <!-- TERMS -->
+  <section id="terms">
+    <div class="sec-head"><span class="sec-num">05</span><h2>名詞小抄</h2></div>
+    <p class="sec-lead">The five factors are usually cited by their single Chinese characters.</p>
+    <div class="gloss">
+      <div class="g"><div class="han">道</div><div><div class="term">dào · the Moral Law</div><div class="def">Shared purpose between ruler and people — the willingness to follow regardless of risk.</div></div></div>
+      <div class="g"><div class="han">天</div><div><div class="term">tiān · Heaven</div><div class="def">Time and conditions: seasons, weather, day and night.</div></div></div>
+      <div class="g"><div class="han">地</div><div><div class="term">dì · Earth</div><div class="def">Terrain: distance, safety vs danger, open vs narrow ground.</div></div></div>
+      <div class="g"><div class="han">將</div><div><div class="term">jiàng · the Commander</div><div class="def">Wisdom, sincerity, benevolence, courage, strictness.</div></div></div>
+      <div class="g"><div class="han">法</div><div><div class="term">fǎ · Method &amp; discipline</div><div class="def">Organization, ranks, supply, and control of expenditure — the logistics.</div></div></div>
+      <div class="g"><div class="han">計</div><div><div class="term">jì · calculation</div><div class="def">The "reckoning" in the temple — the deliberate weighing this whole chapter is about.</div></div></div>
+    </div>
+  </section>
+
+  <div class="foot">
+    A <span class="mono">post-to-visual</span> example · built SVG-only (no AI images, no API key).<br>
+    Source: Sun Tzu, <em>The Art of War</em>, Chapter I, translated by Lionel Giles (1910) — public domain.
+  </div>
+
+</div>
+</body>
+</html>

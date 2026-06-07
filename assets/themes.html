@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-palette="editorial">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>post-to-visual — theme presets</title>
+<meta name="description" content="Live preview of the post-to-visual theme presets: editorial, pine, slate. Switch palette and light/dark to see swatches, a sample card, and a sample diagram before applying a theme to a page.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%234F46E5'/%3E%3Ccircle%20cx='9'%20cy='10'%20r='3.5'%20fill='%23fff'/%3E%3Ccircle%20cx='15'%20cy='14'%20r='3.5'%20fill='%23fff'%20opacity='0.6'/%3E%3C/svg%3E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="post-to-visual — theme presets">
+<meta property="og:description" content="Live preview of the editorial / pine / slate palettes in light + dark.">
+<meta property="og:url" content="https://jazzlien.com/post-to-visual/themes">
+<meta property="og:image" content="https://jazzlien.com/og-default.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://jazzlien.com/og-default.png">
+<link rel="stylesheet" href="themes.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif; background:var(--bg-primary); color:var(--text-primary); line-height:1.7; -webkit-font-smoothing:antialiased; transition:background .2s,color .2s}
+.mono{font-family:'JetBrains Mono',monospace}
+code{font-family:'JetBrains Mono',monospace; font-size:.85em; background:var(--bg-code); padding:1px 6px; border-radius:5px; color:var(--indigo)}
+
+nav{position:sticky; top:0; z-index:50; background:var(--bg-nav); backdrop-filter:blur(12px); border-bottom:1px solid var(--border-default)}
+.nav-inner{max-width:1080px; margin:0 auto; padding:11px 28px; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.nav-brand{font-weight:900; font-size:15px; margin-right:auto; display:flex; align-items:center; gap:9px}
+.nav-brand svg{width:20px;height:20px;color:var(--indigo)}
+.seg{display:flex; gap:4px; background:var(--bg-secondary); border:1px solid var(--border-default); border-radius:10px; padding:3px}
+.seg button{cursor:pointer; border:none; background:transparent; color:var(--text-secondary); border-radius:7px; padding:5px 13px; font-size:12.5px; font-weight:600; font-family:inherit}
+.seg button.on{background:var(--indigo); color:#fff}
+.toggle{cursor:pointer; border:1px solid var(--border-default); background:var(--bg-card); color:var(--text-secondary); border-radius:8px; padding:6px 12px; font-size:12.5px; font-weight:600; font-family:inherit}
+.toggle:hover{border-color:var(--indigo); color:var(--text-primary)}
+
+.wrap{max-width:1080px; margin:0 auto; padding:30px 28px 90px}
+h1{font-size:clamp(30px,4.5vw,44px); font-weight:900; letter-spacing:-.03em; margin-bottom:10px}
+h1 .hl{color:var(--indigo)}
+.sub{color:var(--text-secondary); font-size:17px; max-width:760px; margin-bottom:8px}
+.cur{font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text-tertiary); margin-top:6px}
+.cur b{color:var(--indigo)}
+
+h2{font-size:20px; font-weight:800; margin:36px 0 14px; letter-spacing:-.01em}
+.swatches{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px}
+.sw{border:1px solid var(--border-default); border-radius:12px; overflow:hidden; background:var(--bg-card); box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.sw .chip{height:54px}
+.sw .meta{padding:9px 12px}
+.sw .slot{font-size:12.5px; font-weight:700; color:var(--text-primary)}
+.sw .role{font-size:11px; color:var(--text-tertiary)}
+
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+.card{background:var(--bg-card); border:1px solid var(--border-default); border-radius:14px; padding:20px; box-shadow:var(--shadow,0 1px 2px rgba(0,0,0,.05))}
+.card h3{font-size:16px; font-weight:700; margin-bottom:6px}
+.card p{color:var(--text-secondary); font-size:14px}
+.tag{display:inline-block; font-size:11px; font-family:'JetBrains Mono',monospace; padding:3px 9px; border-radius:20px; margin-right:6px; margin-top:8px; font-weight:600}
+.t-i{background:var(--indigo-bg); color:var(--indigo)} .t-t{background:var(--teal-bg); color:var(--teal)}
+.t-a{background:var(--amber-bg); color:var(--amber)} .t-c{background:var(--coral-bg); color:var(--coral)} .t-g{background:var(--green-bg); color:var(--green)}
+
+.howto{background:var(--bg-code); border:1px solid var(--border-default); border-radius:12px; padding:16px 20px; margin-top:18px; font-size:14px; color:var(--text-secondary)}
+.howto b{color:var(--text-primary)}
+.foot{margin-top:48px; padding-top:22px; border-top:1px solid var(--border-default); font-size:13px; color:var(--text-tertiary); text-align:center}
+@media (max-width:780px){ .grid{grid-template-columns:1fr} .nav-inner{padding:9px 16px} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="10" r="4" fill="currentColor"/><circle cx="15" cy="14" r="4" fill="currentColor" opacity="0.55"/></svg>
+      theme presets
+    </span>
+    <div class="seg" id="palSeg">
+      <button data-pal="editorial" class="on">editorial</button>
+      <button data-pal="pine">pine</button>
+      <button data-pal="slate">slate</button>
+    </div>
+    <button class="toggle" id="themeBtn" onclick="toggleTheme()"><span id="themeLbl">Dark</span></button>
+  </div>
+</nav>
+
+<div class="wrap">
+  <h1>Theme <span class="hl">presets</span></h1>
+  <p class="sub">Three vetted palettes. Switch palette and light/dark above — every accent slot, the sample card, and the sample diagram restyle live. Each palette's <code>--*-solid</code> tokens are pre-checked so white-text boxes stay readable in both modes.</p>
+  <div class="cur">showing &nbsp;<b id="curPal">editorial</b>&nbsp; · &nbsp;<b id="curTheme">light</b></div>
+
+  <h2>Accent slots</h2>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:var(--indigo)"></div><div class="meta"><div class="slot mono">--indigo</div><div class="role">primary accent</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--teal)"></div><div class="meta"><div class="slot mono">--teal</div><div class="role">secondary</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--amber)"></div><div class="meta"><div class="slot mono">--amber</div><div class="role">supporting · warn</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--coral)"></div><div class="meta"><div class="slot mono">--coral</div><div class="role">supporting · bad</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--green)"></div><div class="meta"><div class="slot mono">--green</div><div class="role">supporting · good</div></div></div>
+  </div>
+
+  <h2>On real components</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Sample card</h3>
+      <p>Body text in <code>--text-secondary</code> on <code>--bg-card</code>. The tags below show each accent slot's <code>*-bg</code> tint with its accent text — the readable pairing used across cards and SVG nodes.</p>
+      <span class="tag t-i">primary</span><span class="tag t-t">secondary</span><span class="tag t-a">amber</span><span class="tag t-c">coral</span><span class="tag t-g">green</span>
+    </div>
+    <div class="card" style="padding:14px">
+      <svg width="100%" viewBox="0 0 440 210" style="min-width:360px; font-family:'Inter',sans-serif">
+        <defs><marker id="th1" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="var(--text-tertiary)"/></marker></defs>
+        <rect x="20" y="18" width="120" height="56" rx="11" fill="var(--indigo-bg)"/>
+        <text x="80" y="44" text-anchor="middle" font-size="13" font-weight="700" fill="var(--indigo)">Speed</text>
+        <text x="80" y="62" text-anchor="middle" font-size="10.5" fill="var(--text-secondary)">table stakes</text>
+        <rect x="160" y="18" width="120" height="56" rx="11" fill="var(--teal-bg)"/>
+        <text x="220" y="44" text-anchor="middle" font-size="13" font-weight="700" fill="var(--teal)">Direction</text>
+        <text x="220" y="62" text-anchor="middle" font-size="10.5" fill="var(--text-secondary)">choose</text>
+        <rect x="300" y="18" width="120" height="56" rx="11" fill="var(--amber-bg)"/>
+        <text x="360" y="44" text-anchor="middle" font-size="13" font-weight="700" fill="var(--amber)">Craft</text>
+        <text x="360" y="62" text-anchor="middle" font-size="10.5" fill="var(--text-secondary)">refine</text>
+        <path d="M80,74 C80,118 170,124 200,150" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5" marker-end="url(#th1)"/>
+        <path d="M220,74 L220,150" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5" marker-end="url(#th1)"/>
+        <path d="M360,74 C360,118 270,124 240,150" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5" marker-end="url(#th1)"/>
+        <rect x="120" y="152" width="200" height="50" rx="12" fill="var(--green-solid)"/>
+        <text x="220" y="182" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">Stands out</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="howto">
+    <b>To apply a palette to a page:</b> open <code>themes.css</code>, copy the chosen palette's LIGHT token block into the page's <code>:root{}</code>, and the DARK block into <code>@media (prefers-color-scheme: dark){ :root{ … } }</code>. The token names are accent slots, so existing markup and svg-recipes keep working — only the hues change. Run <code>verify.py</code> after; the green box above uses <code>--green-solid</code> on purpose, so confirm it stays readable when you flip to dark.
+  </div>
+
+  <div class="foot">post-to-visual · theme presets · editorial · pine · slate · toggle light/dark to vet contrast before shipping</div>
+</div>
+
+<script>
+function setCur(){
+  document.getElementById('curPal').textContent=document.documentElement.getAttribute('data-palette');
+  var d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.getElementById('curTheme').textContent=d?'dark':'light';
+  document.getElementById('themeLbl').textContent=d?'Light':'Dark';
+}
+function toggleTheme(){
+  var r=document.documentElement;
+  var d=r.getAttribute('data-theme')==='dark' || (!r.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+  r.setAttribute('data-theme', d?'light':'dark'); setCur();
+}
+document.querySelectorAll('#palSeg button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('#palSeg button').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    document.documentElement.setAttribute('data-palette', b.dataset.pal); setCur();
+  });
+});
+setCur();
+</script>
+</body>
+</html>

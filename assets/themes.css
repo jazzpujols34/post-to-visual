@@ -1,0 +1,78 @@
+/* ===========================================================================
+   post-to-visual — theme presets
+   ---------------------------------------------------------------------------
+   Three vetted palettes so every page doesn't look identical. The token NAMES
+   are accent SLOTS, not literal hues: `--indigo` = primary accent, `--teal` =
+   secondary, `--amber`/`--coral`/`--green` = supporting. A palette just reassigns
+   their values, so existing pages and svg-recipes keep working unchanged.
+
+   HOW TO USE (single-file pages):
+     copy the LIGHT block of your chosen palette into the page's `:root{}`, and
+     the DARK block into `@media (prefers-color-scheme: dark){ :root{ ... } }`.
+     The [data-palette] wrappers below are only so themes.html can preview them.
+
+   CONTRAST RULE (already vetted in every palette):
+     `--*-solid` tokens stay dark enough in BOTH light and dark for #fff text.
+     Use them on any solid-filled box that carries white text (matrix dots,
+     branch/converge outcome boxes). Never put #fff on `var(--green)` etc — those
+     flip light in dark mode. verify.py flags violations.
+   =========================================================================== */
+
+/* ---- 1. EDITORIAL (default) — warm neutral paper, indigo + teal ---------- */
+[data-palette="editorial"]{
+  --bg-primary:#FAFAF8; --bg-secondary:#F2F1EC; --bg-card:#FFFFFF; --bg-code:#F4F3EF; --bg-nav:rgba(250,250,248,.85);
+  --text-primary:#1A1A18; --text-secondary:#52514C; --text-tertiary:#8A887F;
+  --border-default:#E3E1DA; --border-light:#EDEBE4;
+  --indigo:#4F46E5; --indigo-bg:#ECEBFB; --teal:#0D9488; --teal-bg:#E0F2F0;
+  --amber:#B45309; --amber-bg:#FBF1E3; --coral:#DC2626; --coral-bg:#FCE9E9; --green:#15803D; --green-bg:#E6F3EA;
+  --coral-solid:#DC2626; --teal-solid:#0D9488; --green-solid:#15803D; --indigo-solid:#4F46E5; --amber-solid:#B45309;
+}
+[data-palette="editorial"][data-theme="dark"]{
+  --bg-primary:#15140F; --bg-secondary:#1D1C16; --bg-card:#23211A; --bg-code:#1A1914; --bg-nav:rgba(21,20,15,.85);
+  --text-primary:#F1EFE6; --text-secondary:#BFBCB0; --text-tertiary:#85827A;
+  --border-default:#34322A; --border-light:#2A281F;
+  --indigo:#A5A0FB; --indigo-bg:#272447; --teal:#5ED8C9; --teal-bg:#10322E;
+  --amber:#E8A34A; --amber-bg:#3A2C12; --coral:#F08A8A; --coral-bg:#3A1818; --green:#6FD08C; --green-bg:#16331F;
+  --coral-solid:#C23B3B; --teal-solid:#0E7D72; --green-solid:#1C7A40; --indigo-solid:#4940C7; --amber-solid:#9A6310;
+}
+
+/* ---- 2. PINE (Bython) — cool paper, pine-green primary, crimson accent --- */
+[data-palette="pine"]{
+  --bg-primary:#FBFAF6; --bg-secondary:#EFEEE6; --bg-card:#FFFFFF; --bg-code:#F1F1EA; --bg-nav:rgba(251,250,246,.85);
+  --text-primary:#15211C; --text-secondary:#465049; --text-tertiary:#7E867F;
+  --border-default:#E0E1D8; --border-light:#EBEBE2;
+  --indigo:#1F6F5C; --indigo-bg:#E1F0EA;   /* primary slot = Pine green   */
+  --teal:#0E7C86;  --teal-bg:#DCF0F2;       /* secondary slot = Canopy teal */
+  --amber:#9A6A1A; --amber-bg:#F6EDDA;
+  --coral:#B5314A; --coral-bg:#F8E3E7;      /* Crimson */
+  --green:#2E7D32; --green-bg:#E4F1E5;
+  --coral-solid:#B5314A; --teal-solid:#0E7C86; --green-solid:#2E7D32; --indigo-solid:#1F6F5C; --amber-solid:#9A6A1A;
+}
+[data-palette="pine"][data-theme="dark"]{
+  --bg-primary:#101512; --bg-secondary:#18201C; --bg-card:#1D2622; --bg-code:#151B18; --bg-nav:rgba(16,21,18,.85);
+  --text-primary:#ECF1ED; --text-secondary:#B4BDB6; --text-tertiary:#7E867F;
+  --border-default:#2C352F; --border-light:#242C27;
+  --indigo:#69C7AC; --indigo-bg:#143229; --teal:#5BCBD6; --teal-bg:#0E2E32;
+  --amber:#D9A24E; --amber-bg:#332512; --coral:#E98095; --coral-bg:#371920; --green:#74CE78; --green-bg:#163218;
+  --coral-solid:#A33247; --teal-solid:#0E6E78; --green-solid:#2A6E2E; --indigo-solid:#1E6553; --amber-solid:#8A5E18;
+}
+
+/* ---- 3. SLATE — cool neutral, single confident blue, crisp/professional -- */
+[data-palette="slate"]{
+  --bg-primary:#FBFCFD; --bg-secondary:#F1F3F6; --bg-card:#FFFFFF; --bg-code:#F1F4F8; --bg-nav:rgba(251,252,253,.85);
+  --text-primary:#0F1722; --text-secondary:#475063; --text-tertiary:#8A93A3;
+  --border-default:#E1E5EC; --border-light:#EBEEF3;
+  --indigo:#2563EB; --indigo-bg:#E5EDFE;   /* primary = blue */
+  --teal:#0E7490;  --teal-bg:#DDF0F5;       /* secondary = cyan-slate */
+  --amber:#92660C; --amber-bg:#F6EFDC;
+  --coral:#BE3A47; --coral-bg:#FAE6E8; --green:#157A4E; --green-bg:#E1F2EA;
+  --coral-solid:#BE3A47; --teal-solid:#0E7490; --green-solid:#157A4E; --indigo-solid:#2563EB; --amber-solid:#92660C;
+}
+[data-palette="slate"][data-theme="dark"]{
+  --bg-primary:#0D1117; --bg-secondary:#151B23; --bg-card:#1A212B; --bg-code:#12181F; --bg-nav:rgba(13,17,23,.85);
+  --text-primary:#EAEEF4; --text-secondary:#AEB7C4; --text-tertiary:#7C8696;
+  --border-default:#2A323D; --border-light:#222933;
+  --indigo:#7FA6FB; --indigo-bg:#1B2A4A; --teal:#56C0D8; --teal-bg:#0E2A33;
+  --amber:#D6A24E; --amber-bg:#322611; --coral:#EC8088; --coral-bg:#371A1D; --green:#5FC68C; --green-bg:#123226;
+  --coral-solid:#B23A45; --teal-solid:#0E6376; --green-solid:#176A46; --indigo-solid:#2E55C2; --amber-solid:#866011;
+}

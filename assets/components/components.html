@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>post-to-visual — interactive components</title>
+<meta name="description" content="A library of optional, self-contained vanilla-JS components for post-to-visual pages: self-assessment quiz, before/after slider, copy-as-prompt, tabs, expandable glossary, jargon/plain toggle. Each demo runs live and copies as standalone HTML.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%234F46E5'/%3E%3Cg%20stroke='%23fff'%20stroke-width='1.8'%20fill='none'%20stroke-linecap='round'%3E%3Cpath%20d='M8%209l-3%203%203%203'/%3E%3Cpath%20d='M16%209l3%203-3%203'/%3E%3C/g%3E%3C/svg%3E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="post-to-visual — interactive components">
+<meta property="og:description" content="Optional vanilla-JS components for post-to-visual pages: quiz, before/after slider, copy-as-prompt, tabs, glossary, jargon toggle.">
+<meta property="og:url" content="https://jazzlien.com/post-to-visual/components">
+<meta property="og:image" content="https://jazzlien.com/og-default.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://jazzlien.com/og-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-primary:#FAFAF8; --bg-secondary:#F2F1EC; --bg-card:#FFFFFF; --bg-code:#F4F3EF; --bg-nav:rgba(250,250,248,.85);
+  --text-primary:#1A1A18; --text-secondary:#52514C; --text-tertiary:#8A887F;
+  --border-default:#E3E1DA; --border-light:#EDEBE4;
+  --indigo:#4F46E5; --indigo-bg:#ECEBFB; --teal:#0D9488; --teal-bg:#E0F2F0;
+  --amber:#B45309; --amber-bg:#FBF1E3; --coral:#DC2626; --coral-bg:#FCE9E9; --green:#15803D; --green-bg:#E6F3EA;
+  --indigo-solid:#4F46E5; --teal-solid:#0D9488; --green-solid:#15803D;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg-primary:#15140F; --bg-secondary:#1D1C16; --bg-card:#23211A; --bg-code:#1A1914; --bg-nav:rgba(21,20,15,.85);
+  --text-primary:#F1EFE6; --text-secondary:#BFBCB0; --text-tertiary:#85827A; --border-default:#34322A; --border-light:#2A281F;
+  --indigo:#A5A0FB; --indigo-bg:#272447; --teal:#5ED8C9; --teal-bg:#10322E;
+  --amber:#E8A34A; --amber-bg:#3A2C12; --coral:#F08A8A; --coral-bg:#3A1818; --green:#6FD08C; --green-bg:#16331F;
+  --indigo-solid:#4940C7; --teal-solid:#0E7D72; --green-solid:#1C7A40;
+}}
+:root[data-theme="dark"]{
+  --bg-primary:#15140F; --bg-secondary:#1D1C16; --bg-card:#23211A; --bg-code:#1A1914; --bg-nav:rgba(21,20,15,.85);
+  --text-primary:#F1EFE6; --text-secondary:#BFBCB0; --text-tertiary:#85827A; --border-default:#34322A; --border-light:#2A281F;
+  --indigo:#A5A0FB; --indigo-bg:#272447; --teal:#5ED8C9; --teal-bg:#10322E;
+  --amber:#E8A34A; --amber-bg:#3A2C12; --coral:#F08A8A; --coral-bg:#3A1818; --green:#6FD08C; --green-bg:#16331F;
+  --indigo-solid:#4940C7; --teal-solid:#0E7D72; --green-solid:#1C7A40;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif; background:var(--bg-primary); color:var(--text-primary); line-height:1.7; -webkit-font-smoothing:antialiased}
+.mono{font-family:'JetBrains Mono',monospace}
+code{font-family:'JetBrains Mono',monospace; font-size:.85em; background:var(--bg-code); padding:1px 6px; border-radius:5px; color:var(--indigo)}
+
+nav{position:sticky; top:0; z-index:50; background:var(--bg-nav); backdrop-filter:blur(12px); border-bottom:1px solid var(--border-default)}
+.nav-inner{max-width:1040px; margin:0 auto; padding:11px 28px; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.nav-brand{font-weight:900; font-size:15px; margin-right:auto; display:flex; align-items:center; gap:9px}
+.nav-brand svg{width:20px;height:20px;color:var(--indigo)}
+nav a{color:var(--text-secondary); text-decoration:none; font-size:13px; font-weight:500; padding:5px 11px; border-radius:7px}
+nav a:hover{background:var(--bg-secondary); color:var(--text-primary)}
+.toggle{cursor:pointer; border:1px solid var(--border-default); background:var(--bg-card); color:var(--text-secondary); border-radius:8px; padding:6px 12px; font-size:12.5px; font-weight:600; font-family:inherit}
+.toggle:hover{border-color:var(--indigo); color:var(--text-primary)}
+
+.wrap{max-width:1040px; margin:0 auto; padding:30px 28px 90px}
+.hero{padding:40px 0 6px}
+.eyebrow{font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); font-weight:500}
+h1{font-size:clamp(30px,4.6vw,46px); font-weight:900; letter-spacing:-.03em; margin:12px 0 14px}
+h1 .hl{color:var(--indigo)}
+.sub{color:var(--text-secondary); font-size:17px; max-width:780px; line-height:1.6}
+.rule{background:var(--amber-bg); border-radius:12px; padding:14px 18px; margin-top:20px; font-size:14px; color:var(--text-primary)}
+.rule b{font-weight:700; color:var(--amber)}
+
+.cmp{background:var(--bg-card); border:1px solid var(--border-default); border-radius:16px; padding:22px 24px; box-shadow:var(--shadow); margin-bottom:22px}
+.cmp-head{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:14px}
+.cmp-name{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:17px; color:var(--indigo)}
+.cmp-when{font-size:13.5px; color:var(--text-tertiary)}
+.copy{margin-left:auto; cursor:pointer; border:1px solid var(--border-default); background:var(--bg-secondary); color:var(--text-secondary); border-radius:8px; padding:5px 12px; font-size:12px; font-weight:600; font-family:'JetBrains Mono',monospace}
+.copy:hover{border-color:var(--indigo); color:var(--indigo)}
+.copy.done{border-color:var(--green); color:var(--green)}
+.tweak{font-size:13px; color:var(--text-secondary); background:var(--bg-code); border-left:3px solid var(--teal); padding:9px 13px; border-radius:0 8px 8px 0; margin-top:14px}
+.tweak b{color:var(--text-primary)}
+
+/* ---- shared component styles (these ship with each snippet) ---- */
+.q{margin-bottom:14px}
+.q .qt{font-weight:600; font-size:14.5px; margin-bottom:8px}
+.opts{display:flex; flex-wrap:wrap; gap:8px}
+.opt{cursor:pointer; border:1px solid var(--border-default); background:var(--bg-secondary); color:var(--text-secondary); padding:7px 14px; border-radius:9px; font-size:13.5px; user-select:none; transition:.12s}
+.opt:hover{border-color:var(--indigo)}
+.opt.on{background:var(--indigo-solid); border-color:var(--indigo-solid); color:#fff}
+.btn{background:var(--indigo-solid); color:#fff; border:none; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit}
+.btn:hover{filter:brightness(1.08)}
+.result{margin-top:14px; padding:16px; border-radius:12px; background:var(--bg-code); display:none}
+.result.show{display:block}
+.result .band{font-size:20px; font-weight:900; letter-spacing:-.02em; color:var(--indigo)}
+
+.ba{position:relative; width:100%; max-width:520px; aspect-ratio:16/8; border-radius:12px; overflow:hidden; border:1px solid var(--border-default); user-select:none}
+.ba-layer{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:22px; letter-spacing:.02em}
+.ba-after{background:var(--teal-bg); color:var(--teal)}
+.ba-before{background:var(--coral-bg); color:var(--coral); width:50%; border-right:2px solid var(--bg-card)}
+.ba input[type=range]{position:absolute; left:0; right:0; bottom:8px; width:90%; margin:0 5%; accent-color:var(--indigo)}
+
+.tabs{display:flex; gap:6px; border-bottom:1px solid var(--border-default); margin-bottom:12px; flex-wrap:wrap}
+.tab{cursor:pointer; border:none; background:transparent; color:var(--text-secondary); padding:8px 14px; font-size:13.5px; font-weight:600; font-family:inherit; border-bottom:2px solid transparent; margin-bottom:-1px}
+.tab.on{color:var(--indigo); border-bottom-color:var(--indigo)}
+.panel{display:none; font-size:14.5px; color:var(--text-secondary)} .panel.on{display:block}
+
+details.g{border:1px solid var(--border-default); border-radius:10px; padding:0; margin-bottom:8px; overflow:hidden}
+details.g summary{cursor:pointer; padding:11px 15px; font-weight:600; font-size:14.5px; list-style:none; display:flex; justify-content:space-between; align-items:center}
+details.g summary::-webkit-details-marker{display:none}
+details.g summary::after{content:"+"; color:var(--indigo); font-weight:700; font-size:18px}
+details.g[open] summary::after{content:"\2212"}
+details.g .def{padding:0 15px 13px; font-size:13.5px; color:var(--text-secondary)}
+details.g .def .en{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--teal)}
+
+.jt-row{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+.jt-switch{cursor:pointer; border:1px solid var(--border-default); background:var(--bg-secondary); border-radius:20px; padding:5px 14px; font-size:12.5px; font-weight:600; color:var(--text-secondary); font-family:inherit}
+.jt-switch.on{background:var(--teal-solid); color:#fff; border-color:var(--teal-solid)}
+.jt-body{font-size:15px; color:var(--text-secondary); line-height:1.75}
+.jt-plain{display:none} .jt-mode-plain .jt-tech{display:none} .jt-mode-plain .jt-plain{display:inline}
+
+.cp-box{background:var(--bg-code); border:1px solid var(--border-default); border-radius:10px; padding:14px; font-size:13px; color:var(--text-secondary); font-family:'JetBrains Mono',monospace; white-space:pre-wrap; line-height:1.6}
+.cp-row{display:flex; gap:10px; align-items:center; margin-top:10px}
+.cp-row .btn{padding:8px 16px} .cp-row .ok{font-size:13px; color:var(--green); font-weight:600; display:none} .cp-row .ok.show{display:inline}
+
+.foot{margin-top:48px; padding-top:22px; border-top:1px solid var(--border-default); font-size:13px; color:var(--text-tertiary); text-align:center}
+@media (max-width:780px){ .nav-inner{padding:9px 16px} nav a{display:none} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M8 9l-3 3 3 3"/><path d="M16 9l3 3-3 3"/></svg>
+      interactive components
+    </span>
+    <a href="#quiz">quiz</a>
+    <a href="#slider">slider</a>
+    <a href="#prompt">copy</a>
+    <a href="#tabs">tabs</a>
+    <a href="#glossary">glossary</a>
+    <a href="#toggle">toggle</a>
+    <button class="toggle" id="themeBtn" onclick="toggleTheme()"><span id="themeLbl">Dark</span></button>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">post-to-visual · optional widgets</div>
+    <h1>Interactive <span class="hl">components</span></h1>
+    <p class="sub">Self-contained vanilla-JS snippets — no dependencies. Each demo below is live; the copy button gives you a standalone block (markup + scoped script) to paste into a page. Toggle the theme to confirm a widget reads in both modes.</p>
+    <div class="rule"><b>The rule: earn it.</b> Don't add a widget by default. Reach for one only when the content genuinely suits it — a self-assessment for "where do you sit" pieces, a slider for redesigns. A bolted-on quiz makes a page worse, not better.</div>
+  </header>
+
+  <!-- 1. QUIZ -->
+  <div class="cmp" id="quiz">
+    <div class="cmp-head"><span class="cmp-name">self-assessment</span><span class="cmp-when">"where do you sit?" — N questions → a result band</span><button class="copy" data-target="d-quiz">copy</button></div>
+    <div class="demo" id="d-quiz">
+      <div class="q"><div class="qt">1 · How is your code mostly written?</div><div class="opts"><span class="opt" data-v="0">By hand</span><span class="opt" data-v="1">AI drafts, I edit</span><span class="opt" data-v="2">AI writes, I review</span></div></div>
+      <div class="q"><div class="qt">2 · Who reviews it?</div><div class="opts"><span class="opt" data-v="0">Always me</span><span class="opt" data-v="1">Me + AI</span><span class="opt" data-v="2">AI gates, I spot-check</span></div></div>
+      <div class="q"><div class="qt">3 · Who runs the tests / deploy?</div><div class="opts"><span class="opt" data-v="0">Me, manually</span><span class="opt" data-v="1">Scripted, I trigger</span><span class="opt" data-v="2">Agents, on guardrails</span></div></div>
+      <button class="btn quiz-go">See my level</button>
+      <div class="result"><div class="band"></div><div class="desc" style="margin-top:6px;font-size:14px;color:var(--text-secondary)"></div></div>
+      <script>(function(){
+        var root=document.getElementById('d-quiz');
+        root.querySelectorAll('.q').forEach(function(q){
+          q.querySelectorAll('.opt').forEach(function(o){
+            o.addEventListener('click',function(){ q.querySelectorAll('.opt').forEach(function(x){x.classList.remove('on')}); o.classList.add('on'); });
+          });
+        });
+        root.querySelector('.quiz-go').addEventListener('click',function(){
+          var sel=root.querySelectorAll('.opt.on'); if(sel.length<3){alert('Pick one per question.');return;}
+          var s=0; sel.forEach(function(o){s+=+o.dataset.v;});
+          var bands=[['L0 · Manual','Everything by hand. Fine, but every step is a person.'],['L1 · Assisted','AI helps you draft. The work is still yours to drive.'],['L2 · Delegated','You direct, AI does. You review the output.'],['L3 · Supervised','You set guardrails; agents run the line.']];
+          var b=bands[Math.min(Math.round(s/2),3)];
+          var r=root.querySelector('.result'); r.querySelector('.band').textContent=b[0]; r.querySelector('.desc').textContent=b[1]; r.classList.add('show');
+        });
+      })();</script>
+    </div>
+    <div class="tweak"><b>Tweak:</b> add/remove <code>.q</code> blocks; <code>data-v</code> is the points per option; edit the <code>bands</code> array (label + blurb) and the score→band mapping. IIFE-scoped to <code>#d-quiz</code>, so multiple quizzes can coexist.</div>
+  </div>
+
+  <!-- 2. SLIDER -->
+  <div class="cmp" id="slider">
+    <div class="cmp-head"><span class="cmp-name">before / after</span><span class="cmp-when">drag to reveal two states — redesigns, edits</span><button class="copy" data-target="d-slider">copy</button></div>
+    <div class="demo" id="d-slider">
+      <div class="ba">
+        <div class="ba-layer ba-after">AFTER</div>
+        <div class="ba-layer ba-before">BEFORE</div>
+        <input type="range" min="0" max="100" value="50" aria-label="reveal">
+      </div>
+      <script>(function(){
+        var root=document.getElementById('d-slider');
+        var bef=root.querySelector('.ba-before'), rng=root.querySelector('input[type=range]');
+        rng.addEventListener('input',function(){ bef.style.width=rng.value+'%'; });
+      })();</script>
+    </div>
+    <div class="tweak"><b>Tweak:</b> swap the two <code>.ba-layer</code> divs for <code>&lt;img&gt;</code> (give <code>.ba-before</code> <code>overflow:hidden</code> and a fixed-width inner image so it clips, not squishes). The range sets <code>.ba-before</code> width. Works without JS as a static 50/50 if you drop the script.</div>
+  </div>
+
+  <!-- 3. COPY-AS-PROMPT -->
+  <div class="cmp" id="prompt">
+    <div class="cmp-head"><span class="cmp-name">copy-as-prompt</span><span class="cmp-when">push the artifact back into Claude Code</span><button class="copy" data-target="d-prompt">copy</button></div>
+    <div class="demo" id="d-prompt">
+      <div class="cp-box" data-prompt="Take this reading-note page and draft a 5-tweet X thread: hook from the TL;DR, one tweet per section, end with the source link.">Take this reading-note page and draft a 5-tweet X thread:
+hook from the TL;DR, one tweet per section, end with the source link.</div>
+      <div class="cp-row"><button class="btn cp-go">Copy as prompt</button><span class="ok">copied to clipboard ✓</span></div>
+      <script>(function(){
+        var root=document.getElementById('d-prompt');
+        root.querySelector('.cp-go').addEventListener('click',function(){
+          var t=root.querySelector('.cp-box').dataset.prompt;
+          navigator.clipboard.writeText(t).then(function(){ var ok=root.querySelector('.ok'); ok.classList.add('show'); setTimeout(function(){ok.classList.remove('show')},1600); });
+        });
+      })();</script>
+    </div>
+    <div class="tweak"><b>Tweak:</b> put the exact prompt in <code>data-prompt</code> (the visible box is just a preview). Use it to export "copy as JSON" too — set <code>data-prompt</code> to a JSON string. This is the house rule for any interactive artifact: always give a way back into Claude Code.</div>
+  </div>
+
+  <!-- 4. TABS -->
+  <div class="cmp" id="tabs">
+    <div class="cmp-head"><span class="cmp-name">tabs</span><span class="cmp-when">multi-option specs without scroll fatigue</span><button class="copy" data-target="d-tabs">copy</button></div>
+    <div class="demo" id="d-tabs">
+      <div class="tabs"><button class="tab on" data-t="a">Option A</button><button class="tab" data-t="b">Option B</button><button class="tab" data-t="c">Option C</button></div>
+      <div class="panel on" data-p="a">Option A — ship the smallest wedge first. Fastest to learn, least committed.</div>
+      <div class="panel" data-p="b">Option B — broad MECE map, then prototype the top two. Balanced.</div>
+      <div class="panel" data-p="c">Option C — build all three end-to-end in parallel, compare real experiences.</div>
+      <script>(function(){
+        var root=document.getElementById('d-tabs');
+        root.querySelectorAll('.tab').forEach(function(t){
+          t.addEventListener('click',function(){
+            root.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')}); t.classList.add('on');
+            root.querySelectorAll('.panel').forEach(function(p){ p.classList.toggle('on', p.dataset.p===t.dataset.t); });
+          });
+        });
+      })();</script>
+    </div>
+    <div class="tweak"><b>Tweak:</b> match each <code>.tab[data-t]</code> to a <code>.panel[data-p]</code>. One starts <code>.on</code>. IIFE-scoped, so several tab groups coexist. Good for "show me N directions" without a long scroll.</div>
+  </div>
+
+  <!-- 5. GLOSSARY (no JS) -->
+  <div class="cmp" id="glossary">
+    <div class="cmp-head"><span class="cmp-name">expandable glossary</span><span class="cmp-when">名詞小抄 as click-to-define — no JS</span><button class="copy" data-target="d-gloss">copy</button></div>
+    <div class="demo" id="d-gloss">
+      <details class="g"><summary>table stakes</summary><div class="def"><span class="en">table stakes</span> · the minimum to be allowed in the game. Speed is this now — having it just lets you play, it doesn't make you win.</div></details>
+      <details class="g"><summary>hill-climbing</summary><div class="def"><span class="en">hill-climbing locally</span> · only looking for a higher point right next to you, so you summit a small hill and never see the taller one nearby.</div></details>
+      <details class="g"><summary>MECE</summary><div class="def"><span class="en">mutually exclusive, collectively exhaustive</span> · categories that don't overlap and together miss nothing.</div></details>
+    </div>
+    <div class="tweak"><b>Tweak:</b> pure <code>&lt;details&gt;</code> — zero JavaScript, works everywhere, keyboard-accessible. The <code>+</code>/<code>−</code> marker is CSS. Use for the glossary card or to inline-define a term mid-paragraph.</div>
+  </div>
+
+  <!-- 6. JARGON TOGGLE -->
+  <div class="cmp" id="toggle">
+    <div class="cmp-head"><span class="cmp-name">jargon ↔ 白話</span><span class="cmp-when">flip the page between technical and plain wording</span><button class="copy" data-target="d-toggle">copy</button></div>
+    <div class="demo" id="d-toggle">
+      <div class="jt-row"><span style="font-size:13px;color:var(--text-tertiary)">Reading mode:</span><button class="jt-switch on" data-m="tech">Technical</button><button class="jt-switch" data-m="plain">白話</button></div>
+      <div class="jt-body">
+        AI now lets you <span class="jt-tech">explore multiple directions in parallel while pushing each to an end-to-end prototype</span><span class="jt-plain">try several different ideas at once, and build each one far enough that you can actually use it</span>. Instead of <span class="jt-tech">hill-climbing locally</span><span class="jt-plain">just tweaking your first idea over and over</span>, you compare real options side by side.
+      </div>
+      <script>(function(){
+        var root=document.getElementById('d-toggle'), body=root.querySelector('.jt-body');
+        root.querySelectorAll('.jt-switch').forEach(function(s){
+          s.addEventListener('click',function(){
+            root.querySelectorAll('.jt-switch').forEach(function(x){x.classList.remove('on')}); s.classList.add('on');
+            body.classList.toggle('jt-mode-plain', s.dataset.m==='plain');
+          });
+        });
+      })();</script>
+    </div>
+    <div class="tweak"><b>Tweak:</b> wrap each phrase as a <code>.jt-tech</code> / <code>.jt-plain</code> pair; CSS shows one set at a time via <code>.jt-mode-plain</code> on the body. Great when the same page serves engineers and non-programmers (your audience).</div>
+  </div>
+
+  <div class="foot">post-to-visual · interactive components · all vanilla JS, no deps · earn it — don't add a widget a page doesn't need</div>
+</div>
+
+<script>
+function toggleTheme(){
+  var r=document.documentElement;
+  var d=r.getAttribute('data-theme')==='dark' || (!r.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+  r.setAttribute('data-theme', d?'light':'dark');
+  document.getElementById('themeLbl').textContent=d?'Dark':'Light';
+}
+document.querySelectorAll('.copy').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var el=document.getElementById(btn.dataset.target);
+    navigator.clipboard.writeText(el.outerHTML.trim()).then(function(){
+      var old=btn.textContent; btn.textContent='copied ✓'; btn.classList.add('done');
+      setTimeout(function(){ btn.textContent=old; btn.classList.remove('done'); },1400);
+    });
+  });
+});
+</script>
+</body>
+</html>
