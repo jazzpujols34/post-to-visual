@@ -253,6 +253,11 @@ climb + readiness-spectrum as SVG; interactive 5-question self-assessment; favic
   extension from mime). Reference `.jpg` in `og:image`/`twitter:image`/`<img>`. A
   JPEG-named-`.png` makes **LINE drop the OG image**. Verify with `file <img>` if unsure.
 - Don't reach for an AI image when the content is data. Diagram it (svg-diagram skill).
+- **For technical / engineering pieces, mirror the source's schematics with SVG — don't replace
+  them with a decorative metaphor.** A nano-banana "concept" image that doesn't show the real
+  structure reads as empty/flashy next to a source full of cross-sections and mechanism diagrams.
+  Draw the actual structure (e.g. a layer-stack cross-section, a labelled via, a CTE-mismatch
+  warpage mechanism) as SVG; reserve AI images for one atmospheric hero at most.
 - Don't templatize the HTML. Re-structure per post; the value is in the visual decisions.
 - Odd card count in a 2-col grid leaves an ugly gap — promote the orphan to `card-full`.
 - `prefers-color-scheme` dark must define every accent token, or dark mode breaks.
