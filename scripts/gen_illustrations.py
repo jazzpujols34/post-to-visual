@@ -16,8 +16,8 @@ Spec file (JSON):
   }
 }
 
-Run with an interpreter that has google-genai installed. On Jazz's machine:
-  Jazz-Gallery/backend/venv/bin/python3 gen_illustrations.py spec.json
+Run with an interpreter that has google-genai installed (a venv or pipx works):
+  python3 gen_illustrations.py spec.json
 
 GEMINI_API_KEY is read from the environment, or from --env <file>, or auto-discovered
 from common .env locations (see ENV_CANDIDATES below).
@@ -39,7 +39,7 @@ except ImportError:
     sys.exit(
         "Missing deps. Use a Python with google-genai + python-dotenv installed:\n"
         "  pip install google-genai python-dotenv\n"
-        "  (on the author's machine: Jazz-Gallery/backend/venv/bin/python3)"
+        "  (a virtualenv or pipx-managed Python is simplest)"
     )
 
 MODEL = os.environ.get("NANO_BANANA_MODEL", "gemini-3.1-flash-image-preview")  # do NOT downgrade to 2.0
@@ -49,8 +49,7 @@ TIMEOUT_S = 150
 def env_candidates(spec_path: Path) -> list[Path]:
     """Where to look for the API key's .env, in priority order. Portable: searches
     the spec's own folder and up to 4 parents (repo root), the cwd, and a user config
-    dir — so it works on any machine, not just the author's. The legacy author path
-    stays last as a harmless fallback."""
+    dir — so it works on any machine."""
     cands: list[Path] = []
     d = spec_path.parent.resolve()
     for _ in range(5):
@@ -60,8 +59,6 @@ def env_candidates(spec_path: Path) -> list[Path]:
         d = d.parent
     cands.append(Path.cwd() / ".env")
     cands.append(Path.home() / ".config/post-to-visual/.env")
-    # legacy author location (ignored if absent on other machines)
-    cands.append(Path.home() / "Desktop/jazz/0_GitHub/Repositories/17_ultimate_Claude/Jazz-Gallery/scripts/.env")
     return cands
 
 

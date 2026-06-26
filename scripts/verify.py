@@ -184,7 +184,13 @@ def check_tables_and_svg(html, rep):
 # ---- optional rendered check (only if gstack browse is present) ------------
 
 def find_browse():
-    cands = [
+    # Optional headless-render check. Point P2V_BROWSE at any compatible
+    # browse binary; otherwise fall back to a gstack install if present.
+    cands = []
+    env = os.environ.get("P2V_BROWSE")
+    if env:
+        cands.append(Path(env))
+    cands += [
         Path.cwd() / ".claude/skills/gstack/browse/dist/browse",
         Path.home() / ".claude/skills/gstack/browse/dist/browse",
     ]
@@ -198,7 +204,7 @@ def rendered_console_check(path: Path, rep):
     import http.server, socketserver, subprocess, threading, functools
     browse = find_browse()
     if not browse:
-        print(f"   {C['dim']}(rendered checks skipped — no gstack browse binary){C['z']}")
+        print(f"   {C['dim']}(rendered checks skipped — set P2V_BROWSE to a browse binary to enable){C['z']}")
         return
     root = path.parent
     handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(root))

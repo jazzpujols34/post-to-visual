@@ -1,7 +1,7 @@
 # V2 Standalone HTML Reference Page
 
-> How to build Jazz's preferred single-file HTML reference pages.
-> These render standalone in a browser AND convert to JSX for the KM React app.
+> How to build single-file HTML reference pages.
+> These render standalone in a browser AND can be ported into a React app as JSX.
 
 ## When to reach for this
 
@@ -19,9 +19,9 @@ Skip this format and use Markdown only for: short utility files (HANDOVER.md, CH
 
 One self-contained HTML file. No external deps. Own CSS with light + dark mode. Two contexts:
 1. **Standalone** — opened in browser, full page with nav
-2. **KM system** — converted to JSX components, nav/header stripped, parent app provides theme
+2. **Embedded in an app** — converted to JSX components, nav/header stripped, the parent app provides the theme
 
-Design for standalone first. Every decision must survive the KM conversion.
+Design for standalone first. Every decision must survive the conversion into an app.
 
 ## Layout
 
@@ -48,9 +48,9 @@ Define BOTH light and dark themes. Required tokens:
 - Text: `--text-primary`, `--text-secondary`, `--text-tertiary`
 - Border: `--border-default`, `--border-light`
 
-Standalone uses `prefers-color-scheme`. KM uses `data-theme` attribute on `<html>`.
+Standalone uses `prefers-color-scheme`. An embedding app typically uses a `data-theme` attribute on `<html>`.
 
-If you add a new CSS variable in standalone, add it to KM's `index.css` too.
+If you add a new CSS variable in standalone, add it to the app's stylesheet too.
 
 ## SVG diagrams
 
@@ -61,7 +61,7 @@ If you add a new CSS variable in standalone, add it to KM's `index.css` too.
 
 **Rules that prevent the most common failures:**
 
-1. **Font-family must be inline** on `<svg>` — KM system won't inherit parent fonts
+1. **Font-family must be inline** on `<svg>` — an embedding app won't inherit parent fonts
 2. **All colors use CSS variables** — no hardcoded hex, or dark mode breaks
 3. **Each diagram gets a unique arrow marker ID** (`a1`, `a2`, `a3`...) — IDs are document-global, duplicates silently break
 4. **Never put label + description side-by-side on same line** — always stack as two lines (label bold, desc smaller below). Min rect height: 52px for two-line content
@@ -89,4 +89,4 @@ Every `<table>` must be wrapped in `overflow-x: auto` container. Set `min-width:
 - [ ] Card count per section is even (regular cards only)
 - [ ] All tables wrapped in scrollable container
 - [ ] SVG: no text overlap, no text clipping, colors use variables
-- [ ] Dark mode works in both standalone and KM
+- [ ] Dark mode works both standalone and when embedded in an app

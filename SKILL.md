@@ -1,6 +1,6 @@
 ---
 name: post-to-visual
-description: Turn an article, post, or long note into a 圖文好讀版 — a single-file, illustrated, easy-to-read HTML page with AI-generated editorial illustrations and SVG data-viz, optionally translated to 繁體中文. Use when the user wants to "make this readable", "turn this post into a nice page", "圖文版", "visualize this article", or share a writeup with a team. NOT for slide decks (use frontend-slides) or standalone images (use generate-gallery-art).
+description: Turn an article, post, or long note into a 圖文好讀版 — a single-file, illustrated, easy-to-read HTML page with AI-generated editorial illustrations and SVG data-viz, optionally translated to 繁體中文. Use when the user wants to "make this readable", "turn this post into a nice page", "圖文版", "visualize this article", or share a writeup with a team. NOT for slide decks or standalone image generation.
 ---
 
 # Skill: Post → Visual (圖文好讀版)
@@ -17,8 +17,8 @@ re-read or share. Output is one self-contained HTML file + an `assets/images/` f
 ## What this skill is (and isn't)
 
 - It **is** the pipeline order + the nano-banana recipe + a toolkit.
-- It is **not** an HTML template. Per root CLAUDE.md: don't templatize HTML, decide what
-  the artifact does and prompt for it. Structure each post on its own merits.
+- It is **not** an HTML template: don't templatize HTML — decide what the artifact does and
+  prompt for it. Structure each post on its own merits.
 
 ## What ships with the skill
 
@@ -36,8 +36,7 @@ re-read or share. Output is one self-contained HTML file + an `assets/images/` f
 - `scripts/cli.py` (`p2v`) — standalone CLI (new / palette / images / verify / gallery / serve)
   so non-Claude-Code users can scaffold + check pages. `README.md` has the quickstart; `LICENSE` is MIT.
 - `knowledge/{nano-banana-images,v2-standalone-structure,anti-ai-writing}.md` — bundled so the
-  skill is self-contained. In this monorepo they mirror `.claude/knowledge/`; if you edit the
-  originals there, re-copy them here.
+  skill is self-contained (writing rules + single-file-HTML structure rules).
 - `README.md` — quickstart + config. `examples/` — a runnable, no-API-key sample.
 
 ## The pipeline
@@ -51,11 +50,11 @@ sections need a diagram, not an image. Sections that are pure prose stay prose.
 Before anything, decide how the source comes in:
 - **Publicly retrievable** (TrendForce Substack, most blogs) → WebFetch the text + browse for
   figures (step 1.5).
-- **Not retrievable** (paywalled, login-walled, or an X/Twitter article Claude can't open) →
-  **don't guess from the URL.** Ask Jazz for a local file: he pastes the full article into an
-  `.md` and attaches the images alongside it. Then the source of record IS that local md +
+- **Not retrievable** (paywalled, login-walled, or an X/Twitter article the agent can't open) →
+  **don't guess from the URL.** Ask the user for a local file: have them paste the full article
+  into an `.md` and attach the images alongside it. Then the source of record IS that local md +
   its images — read those for both the text and the figure pass. (This is the standard path
-  for X posts: Jazz copies the whole thread/article into md so it can be made visual.)
+  for X posts: paste the whole thread/article into md so it can be made visual.)
 
 ### 1.5 Read the source's own images — WebFetch is text-only
 WebFetch converts the page to markdown and never *sees* images; charts, comparison
@@ -88,14 +87,14 @@ A post-to-visual page is fully valid with zero AI images: carry it on the `asset
 diagrams + strong typography + pull-quotes. Pure-prose essays often look *better* without
 stock-feel illustrations. Just skip this step and lean on step 3.
 
-**The key is configurable** (no longer pinned to one machine): `gen_illustrations.py` reads
+**The key is configurable:** `gen_illustrations.py` reads
 `GEMINI_API_KEY` from the env, or `--env path/to/.env`, or auto-discovers a `.env` in the
 spec's folder / up to the repo root / `~/.config/post-to-visual/.env`. No key → it exits with
 the SVG-only instructions above. Provider is pluggable (`"provider"` in the spec or `--provider`);
 only `gemini` ships today, with a documented seam to add OpenAI/Flux/local later.
 
 Write a JSON spec and run the reusable script (any Python with `google-genai` +
-`python-dotenv`; on the author's machine that's `Jazz-Gallery/backend/venv/bin/python3`):
+`python-dotenv` installed):
 ```bash
 python3 scripts/gen_illustrations.py path/to/<slug>.spec.json
 ```
@@ -169,7 +168,7 @@ Rules that make it actually work:
 - **`og:image` and `og:url` MUST be absolute** (`https://…`). Crawlers (FB/LinkedIn/Slack/X)
   ignore relative paths → blank preview. Ask the user for their public base URL; build the
   URLs as `<base>/<slug>` for the page and `<base>/<slug>-assets/images/<name>` for assets.
-  (Author's convention: base = `https://jazzlien.com/learn-files`.)
+  (e.g. base = `https://yoursite.com/posts`.)
 - **First _raster_ image**, not the first visual. An inline SVG diagram can't be an OG
   image. If the page leads with SVG and has no `<img>`, fall back to a site-default OG image.
 - Set explicit `og:image:width/height` (read with `sips -g pixelWidth -g pixelHeight`) so
@@ -177,14 +176,14 @@ Rules that make it actually work:
   close enough to the ideal 1200×630 (platforms center-crop).
 
 ### 6. Translate (if requested)
-Default English. If Jazz asks for 中文, write 繁體中文 and **read
+Default English. If the user asks for 中文, write 繁體中文 and **read
 `knowledge/anti-ai-writing.md` first** — no 三段排比, no 重要性膨脹, no AI vocab
 clusters. Technical terms stay in English with Chinese parentheticals.
 
 ### 7. Verify
 **First run the static checker — it catches the recurring bugs mechanically:**
 ```bash
-python3 .claude/skills/post-to-visual/scripts/verify.py path/to/page.html
+python3 scripts/verify.py path/to/page.html
 ```
 It checks tag balance, nav `href="#id"`→`id` resolution (ignoring code samples), absolute
 `og:image`/`og:url`, favicon present, every `<img>` exists + extension matches real bytes
@@ -201,9 +200,9 @@ crowding, whether the metaphor reads) — you still look.
 ### 8. Coverage + comprehension review (content gate)
 Step 7 proves the page *renders*; step 8 proves it does its job. The page has two jobs and
 both must pass: **capture everything the source says**, and **make it understandable to a
-non-specialist**. Jazz reads these to build real tech judgment (he invests on it), so a
-sentence he can't follow is a failure, not a nitpick. Follow root CLAUDE.md **"Review
-discipline"**: ENUMERATE FIRST, check EACH, never "the main points".
+non-specialist**. The reader uses these to build real understanding, so a sentence they
+can't follow is a failure, not a nitpick. Apply strict review discipline: ENUMERATE FIRST,
+check EACH, never "the main points".
 
 **A. Completeness — did we drop anything from the source?**
 1. Build the checklist from BOTH inputs — the text fetch AND the step-1.5 figure pass.
@@ -228,25 +227,22 @@ discipline"**: ENUMERATE FIRST, check EACH, never "the main points".
 the whole value. The only rule on additions: any *fact* you add (a spec, a number) must be
 correct, not invented. A wrong number is worse than a missing one — it poisons the learning.
 If unsure, verify or leave it out. (No provenance-tagging needed — we don't care whether a
-line came from the post, only that it's right and it helps Jazz understand.)
+line came from the post, only that it's right and it helps the reader understand.)
 
 **Report.** Findings = (`MISSING` + `PARTIAL`) + (un-glossed terms) + (sentences a layperson
 can't follow). Fix them all, then restate the final counts. "Looks thorough" is not a result.
 
 ## Reference implementation
 
-`Reference-post/alex-lieberman-30-days-of-ai/pages/day1-software-factory.html` (+ its
-`day1-software-factory-assets/`) — Alex Lieberman's "Software Factory" post turned into a
-繁中 圖文好讀版 (hero + metaphor + ladder illustrations from nano banana; level-matrix +
-climb + readiness-spectrum as SVG; interactive 5-question self-assessment; favicon + OG).
-`day1-software-factory-assets/gen_images.py` is the original per-job script the reusable
-`scripts/gen_illustrations.py` was generalized from. Series index + folder convention:
-`Reference-post/alex-lieberman-30-days-of-ai/README.md` (posts/ + pages/, `dayN-<slug>` prefix).
+`examples/art-of-war-laying-plans/laying-plans.html` (+ its `source.md`) — Sun Tzu's
+"Laying Plans" turned into a 圖文好讀版 carried entirely on hand-drawn SVG diagrams +
+typography (favicon + OG, light + dark, **no API key**). Open it to see the target quality;
+it's fully reproducible with zero key.
 
 ## Gotchas
 
 - Image gen needs `google-genai` + `python-dotenv` (`pip install google-genai python-dotenv`).
-  On the author's machine base anaconda lacks them — use `Jazz-Gallery/backend/venv/bin/python3`.
+  If your system Python lacks them, use a venv (or pipx) that has them installed.
 - Nano banana garbles text — every image prompt MUST say "no text, no letters". Put
   labels in HTML/SVG, never in the image.
 - Nano banana returns **JPEG bytes** — files come out `.jpg` (the script derives the
@@ -266,49 +262,47 @@ climb + readiness-spectrum as SVG; interactive 5-question self-assessment; favic
   white text becomes white-on-light = unreadable. Add `--coral-solid/--teal-solid/--green-solid`
   that stay dark enough for white text in BOTH themes, and use those on filled outcome/result
   boxes. Tinted nodes (`*-bg` fill + accent text) are fine — only solid-fill-plus-white-text
-  breaks. Caught on the Figma "what-matters-when-anyone-can-build" essay (triad + branching SVGs);
-  the light-mode screenshot looked perfect, only the forced-dark screenshot exposed it.
+  breaks. Caught in practice on a page with triad + branching SVGs — the light-mode screenshot
+  looked perfect; only the forced-dark screenshot exposed it.
 - **Nav links: style with `nav a`, NOT `.nav a`.** The element is `<nav>` (a tag), so a
   `.nav a` rule (class selector) matches nothing — links silently fall back to browser-default
-  blue-underlined and the nav looks broken. This bug rode along from the day1 reference because
-  the live KM/React build strips the standalone nav, so it never showed on jazzlien.com — but it
-  IS visible whenever you open the standalone file (which is exactly how Jazz reviews). Use the
-  bare tag selector. Same applies to the `:not(.nav-key)` mobile-collapse rule.
+  blue-underlined and the nav looks broken. It hides when a page is embedded in a site framework
+  that strips the standalone nav — but it IS visible whenever you open the standalone file
+  directly. Use the bare tag selector. Same applies to the `:not(.nav-key)` mobile-collapse rule.
 - **`.sec-num` ("01") must scale with the `h2`.** At a fixed 13px next to a 34px heading it reads
   like a stray subscript. Use `clamp(22px,3vw,30px)` + weight 700 so it sits as a real companion
   on the shared baseline (`.sec-head` is `align-items:baseline`).
 - A page with no favicon / no OG looks unfinished and fake when shared. Step 5 is mandatory.
-- **Gloss the jargon — Jazz's audience includes non-programmers.** Define every industry acronym
+- **Gloss the jargon — assume the audience includes non-programmers.** Define every industry acronym
   at first use (one parenthetical) and add a compact 名詞小抄 glossary card for jargon-dense pieces
   (TSV, D2D PHY, TOPS, Fluxless, KV cache…). A naked acronym is a dead end for a lay reader. For
-  tech-explainers: NO investment-disclaimer boilerplate (非投資建議／未獨立查證／DYOR) from
-  computex-2026-memory onward — keep source attribution only; the hedging clutters an educational page.
+  tech-explainers: skip investment-disclaimer boilerplate (非投資建議／未獨立查證／DYOR) —
+  keep source attribution only; the hedging clutters an educational page.
 - Relative `og:image` = blank social preview. Always absolute. This is the #1 OG mistake.
 - **Pretty ≠ complete — run the coverage review (step 8).** The technical verify passes while
   whole figures are still missing. Two goals: capture everything from the source, and gloss
-  every jargon term so a non-specialist follows it. On computex-2026-memory an
-  enumerate-and-check audit caught real drops the text-only fetch never surfaced — the event
-  dates (Jun 2–5) and Syntronix's WoW camera-module demo. Adding explanation/examples beyond
-  the source is good (that's the point); just keep any added *fact* correct, not invented.
+  every jargon term so a non-specialist follows it. In practice an enumerate-and-check audit
+  catches real drops the text-only fetch never surfaces — e.g. event dates and a figure-only
+  product demo. Adding explanation/examples beyond the source is good (that's the point); just
+  keep any added *fact* correct, not invented.
 - **Don't explain new things from memory — web-search them.** These posts are usually news, so
   the headline products/specs/events are post-training-cutoff. Glossing a just-announced part
   from "knowledge" produces confident wrong explanations. Search the novel specifics (the basics
   like "what is HBM" are fine direct). If search can't confirm it, say so — never invent.
 - **Source not retrievable? Get the local md, don't guess.** Paywalled / login-walled / X
-  articles Claude can't open → Jazz pastes the full text into an `.md` with images attached;
-  that file becomes the source of record for both the text and figure pass. Standard path for
-  X posts.
+  articles the agent can't open → ask the user to paste the full text into an `.md` with images
+  attached; that file becomes the source of record for both the text and figure pass. Standard
+  path for X posts.
 - **WebFetch can't read figures.** It's text-only — charts / diagrams / tables-as-images are
   invisible. Always run the image pass (step 1.5). On the TrendForce inference-chip piece the
   text alone missed a 6-chip tokens/sec ranking, a Digital/Analog/Hybrid CIM taxonomy, and a
   full spec-comparison table — every one of them figure-only. Skipping the pass = silently
   dropping the article's hardest data.
-- **`spec.json` must NOT live inside `*-assets/`.** Deploy does `cp -R <slug>-assets`, so a
-  spec dropped in there ships your nano-banana prompts to prod (deploy agent caught + stripped
-  it on Day 3/4). Store it one level up as `pages/<slug>.spec.json` with
-  `"out_dir": "<slug>-assets/images"` — only `images/` should ride along to the live site.
-- **Name the local asset folder with the live slug only — `<slug>-assets/`, NO `dayN-`
-  prefix.** The page file/post keep the `dayN-` prefix (ordering), but the assets folder must
+- **`spec.json` must NOT live inside `*-assets/`.** If your deploy step copies `<slug>-assets/`
+  wholesale, a spec dropped inside it ships your image prompts to production. Store it one level
+  up (e.g. `<slug>.spec.json`) with `"out_dir": "<slug>-assets/images"` — only `images/` should
+  ride along to the live site.
+- **Name the asset folder with the live slug only — `<slug>-assets/`.** The assets folder must
   match the live + OG path exactly so the in-page `<img src>`, the OG tags, and the deployed
-  path all agree and the deploy step needs zero rename work. (Pre-2026-06 pages were
-  day-prefixed and got renamed on deploy; Day 3/4 onward are slug-only at the source.)
+  path all agree and deploy needs zero rename work. If you prefix page files for ordering, keep
+  that prefix off the assets folder.

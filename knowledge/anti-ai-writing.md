@@ -1,7 +1,6 @@
 # Knowledge: Anti-AI Writing Guide
 
 > Reference checklist for avoiding AI-sounding prose in English AND Chinese.
-> Source files: `X-reference-post/#8 - Anti_AI_writing.md` (English), `#9 - Anti_AI_writing_Chinese.md` (中文)
 > Read this before: writing articles, blog posts, documentation, or any public-facing prose.
 
 ## Banned Vocabulary
