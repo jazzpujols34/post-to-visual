@@ -1,5 +1,7 @@
 # post-to-visual
 
+![post-to-visual — turn an article into an illustrated, easy-read HTML page](docs/cover.jpg)
+
 Turn an article, post, or dense note into an **illustrated, easy-to-read web page** — one
 self-contained HTML file you can share or re-read. (圖文好讀版 means "illustrated easy-read
 version" in Chinese.)
